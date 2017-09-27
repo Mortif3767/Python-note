@@ -57,11 +57,24 @@ class Class(models.Model):
 ```
 可见django要简便智能的多，但是flask的书写方式会让你更清楚多对多关系表的工作原理。  
 在这两个例子中，可以用(django):`student.classes.all()`和`class.students.all()`，(flask):`student.classes.query.all()`和`class.students.query.all()`达到相互引用的效果。  
-  
-需要注意的是，django的表中，related_name并非必须，如果未设置将会用表名+“_set”替代。  
+
+需要注意的是，django的表中，related_name并非必须，如果未设置将会用**表名+“_set”**替代。  
 
 ## django的聚合
 
 主要内容可见：http://python.usyiyi.cn/translate/django_182/topics/db/aggregation.html  
-  
-这里主要提醒
+
+这里主要提醒一下，在反向聚合中，如果没有定义`related_name`，可以直接使用表名的小写作引用。  
+例如：  
+```
+class Publisher(models.Model):
+    name = models.CharField(max_length=300)
+    num_awards = models.IntegerField()
+
+class Book(models.Model):
+    publisher = models.ForeignKey(Publisher)
+    pubdate = models.DateField()
+    
+p = Publisher.objects.annotate(Count('book'))  #注意book的使用
+c = Publisher.objects.aggregate(oldest_pubdate=Min('book__pubdate'))
+```
