@@ -56,7 +56,7 @@ class Class(models.Model):
     # ...
 ```
 可见django要简便智能的多，但是flask的书写方式会让你更清楚多对多关系表的工作原理。  
-在这两个例子中，可以用(django):`student.classes.all()`和`class.students.all()`，(flask):`student.classes.query.all()`和`class.students.query.all()`达到相互引用的效果。  
+在这两个例子中，可以用`student.classes.all()`和`class.students.all()`相互引用。  
 
 需要注意的是，django的表中，related_name并非必须，如果未设置将会用**表名+“_set”**替代。  
 
