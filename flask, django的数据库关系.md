@@ -23,3 +23,45 @@ class Role(models.Model):
 class User(models.Model):
     role = models.ForeignKey(Role, related_name=users)
 ```
+需要注意的区别：  
+1.django的数据库关系全部定义在多的一方，有一向多的反向引用定义在`related_name`里，该参数如果不定义，则django默认为多方表名+“_set”，本例即为`user_set`。  
+2.flask的数据库关系，在多方定义外键，在一方定义关系，反向引用定义在一方的backref里。  
+  
+## 多对多关系  
+  
+**flask**写多对多关系比较复杂，必须写关系表，示例模型为：学生(Student)与课程(classes)。  
+```
+registrations = db.Table('registrations',
+    db.Column('student_id', db.Integer, db.ForeignKey('students.id')),
+    db.Column('class_id', db.Integer, db.ForeignKey('classes.id'))
+)
+
+class Student(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    # ...
+    classes = db.relationship('Class', secondary=registrations,
+                              backref=db.backref('students', lazy='dynamic'),
+                              lazy='dynamic')
+                              
+class Class(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    #...
+```
+而**django**的写法就很简单：  
+```
+class Student(models.Model):
+    classes = models.ManyToManyField(Class, related_name='students')
+    
+class Class(models.Model):
+    # ...
+```
+可见django要简便智能的多，但是flask的书写方式会让你更清楚多对多关系表的工作原理。  
+在这两个例子中，可以用(django):`student.classes.all()`和`class.students.all()`，(flask):`student.classes.query.all()`和`class.students.query.all()`达到相互引用的效果。  
+  
+需要注意的是，django的表中，related_name并非必须，如果未设置将会用表名+“_set”替代。  
+
+## django的聚合
+
+主要内容可见：http://python.usyiyi.cn/translate/django_182/topics/db/aggregation.html  
+  
+这里主要提醒
