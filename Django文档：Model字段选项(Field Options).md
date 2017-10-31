@@ -1,4 +1,6 @@
-建立一个简易Model  
+原文来源：http://www.cnblogs.com/linxiyue/p/3662535.html ,搜到一篇总结很好的文章，转过来留作查用。  
+  
+建立一个简易Model  
 ```
 class Person(models.Model):
     GENDER_CHOICES=(
