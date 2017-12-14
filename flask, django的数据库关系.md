@@ -22,7 +22,7 @@ class Role(models.Model):
     # ...
     
 class User(models.Model):
-    role = models.ForeignKey(Role, related_name=users)
+    role = models.ForeignKey(Role, related_name='users')
 ```
 需要注意的区别：  
 1.django的数据库关系全部定义在多的一方，有一向多的反向引用定义在`related_name`里，该参数如果不定义，则django默认为多方表名+“_set”，本例即为`user_set`。  
