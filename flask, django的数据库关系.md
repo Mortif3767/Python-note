@@ -7,6 +7,7 @@
 **flask写法**，示例模型为：用户权限`Role`为“一”的一方，用户`User`为“多”的一方。  
 ```
 class Role(db.Model):
+    __tablename__ = 'roles'
     # ...
     users = db.relationship('User', backref='role', lazy='dynamic')
     
