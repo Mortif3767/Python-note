@@ -47,17 +47,18 @@ class User(UserMixin, db.Model):
 	id = db.Column(db.Integer,primary_key=True)
     # ...
 	followed = db.relationship('Follow',
-		                   foreign_keys=[Follow.follower_id],
+		                   foreign_keys=[Contact.follower_id],
 		                   backref=db.backref('follower', lazy='joined'),
 		                   lazy='dynamic',
 		                   cascade='all, delete-orphan')
 	followers = db.relationship('Follow',
-		                    foreign_keys=[Follow.followed_id],
+		                    foreign_keys=[Contact.followed_id],
 		                    backref=db.backref('followed', lazy='joined'),
 		                    lazy='dynamic',
 		                    cascade='all, delete-orphan')
 ```
-Contact为中间表，User表中分别定义followed和followers两个一对多关系，原理同django类似。  
+Contact为中间表，User表中分别定义followed和followers两个一对多关系，原理同django类似。 
+  
 **创建关注关系**  
 ```
 c = Contact(follower=user1, followed=user2)
